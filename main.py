@@ -2,9 +2,9 @@ import streamlit as st
 from tasks import generate_and_process_code, ImageGeneration
 from PIL import Image
 import os
-import io
+import webbrowser
 import zipfile
-import tempfile
+import io
 
 st.set_page_config(page_title="Ghata AI-Powered Website Generation Tool", layout="wide")
 
@@ -29,26 +29,29 @@ st.header("Step 1: Logo")
 logo_choice = st.radio("Choose an option for your logo:", ("Upload Logo", "Generate Logo"))
 
 def save_and_resize_logo(image, filename):
-    # Use a temporary directory for Streamlit Cloud
-    with tempfile.TemporaryDirectory() as temp_dir:
-        # Save original logo
-        logo_path = os.path.join(temp_dir, filename)
-        image.save(logo_path)
-        st.session_state.logo_path = logo_path
-        
-        # Resize for display
-        max_height = 200  # Fixed max height of 200 pixels
-        aspect_ratio = image.width / image.height
-        new_width = int(max_height * aspect_ratio)
-        resized_image = image.resize((new_width, max_height))
-        
-        return resized_image, logo_path
+    # Ensure save_path exists
+    if st.session_state.save_path is None:
+        st.session_state.save_path = os.path.join(os.getcwd(), "generated_website")
+        os.makedirs(st.session_state.save_path, exist_ok=True)
+    
+    # Save original logo
+    logo_path = os.path.join(st.session_state.save_path, filename)
+    image.save(logo_path)
+    st.session_state.logo_path = logo_path
+    
+    # Resize for display
+    max_height = 200  # Fixed max height of 200 pixels
+    aspect_ratio = image.width / image.height
+    new_width = int(max_height * aspect_ratio)
+    resized_image = image.resize((new_width, max_height))
+    
+    return resized_image
 
 if logo_choice == "Upload Logo":
     logo = st.file_uploader("Upload your logo (1024x1024 recommended)", type=["png", "jpg", "jpeg"])
     if logo:
         logo_image = Image.open(logo)
-        resized_logo, logo_path = save_and_resize_logo(logo_image, "uploaded_logo.png")
+        resized_logo = save_and_resize_logo(logo_image, "uploaded_logo.png")
         st.image(resized_logo, caption="Uploaded Logo", use_column_width=False)
 else:
     logo_description = st.text_input("Describe the logo to generate:", 
@@ -58,7 +61,7 @@ else:
             image_gen = ImageGeneration(HUGGINGFACE_API_KEY)
             generated_image = image_gen.generate_image(logo_description)
             if generated_image:
-                resized_image, logo_path = save_and_resize_logo(generated_image, "generated_logo.png")
+                resized_image = save_and_resize_logo(generated_image, "generated_logo.png")
                 st.image(resized_image, caption="Generated Logo", use_column_width=False)
             else:
                 st.error("Failed to generate logo.")
@@ -77,13 +80,14 @@ secondary_color = st.color_picker("Choose secondary color for your website", "#F
 if st.button("Generate Website"):
     if website_description and RAPIDAPI_KEY:
         with st.spinner("Generating website..."):
-            html_content, css_content, js_content = generate_and_process_code(
+            html_content, css_content, js_content, save_path = generate_and_process_code(
                 website_description, RAPIDAPI_KEY, st.session_state.logo_path,
                 business_name, main_color, secondary_color
             )
             
             if html_content and css_content and js_content:
                 st.session_state.generated_code = (html_content, css_content, js_content)
+                st.session_state.save_path = save_path
                 st.success("Website generated successfully!")
             else:
                 st.error("Failed to generate website. Please check the logs for details.")
@@ -112,47 +116,32 @@ if st.session_state.generated_code:
     
     # Preview generated website
     if st.button("Preview Generated Website"):
-        # Create a temporary HTML file with the generated content
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as temp_file:
-            temp_file.write(f"""
-            <html>
-            <head>
-                <style>{css_content}</style>
-            </head>
-            <body>
-                {html_content}
-                <script>{js_content}</script>
-            </body>
-            </html>
-            """)
-            temp_file_path = temp_file.name
-        
-        # Use st.components.v1.html to display the HTML content
-        st.components.v1.html(open(temp_file_path, 'r').read(), height=600)
-        
-        # Clean up the temporary file
-        os.unlink(temp_file_path)
+        if st.session_state.save_path:
+            webbrowser.open('file://' + os.path.realpath(os.path.join(st.session_state.save_path, "index.html")))
+            st.success("Website opened in a new tab. If it didn't open automatically, please check your browser settings.")
+        else:
+            st.error("Unable to preview the website. The files may not have been saved correctly.")
 
     # Add download zip button
     if st.button("Download Website as ZIP"):
-        # Create a ZIP file in memory
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-            zip_file.writestr("index.html", html_content)
-            zip_file.writestr("styles.css", css_content)
-            zip_file.writestr("script.js", js_content)
-            if st.session_state.logo_path:
-                zip_file.write(st.session_state.logo_path, os.path.basename(st.session_state.logo_path))
-        
-        zip_buffer.seek(0)
-        st.download_button(
-            label="Download ZIP",
-            data=zip_buffer,
-            file_name="generated_website.zip",
-            mime="application/zip"
-        )
-    else:
-        st.error("No generated website files found.")
+        if st.session_state.save_path:
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                for root, _, files in os.walk(st.session_state.save_path):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, st.session_state.save_path)
+                        zip_file.write(file_path, arcname)
+            
+            zip_buffer.seek(0)
+            st.download_button(
+                label="Download ZIP",
+                data=zip_buffer,
+                file_name="generated_website.zip",
+                mime="application/zip"
+            )
+        else:
+            st.error("No generated website files found.")
 
 # Instructions
 st.sidebar.markdown("""

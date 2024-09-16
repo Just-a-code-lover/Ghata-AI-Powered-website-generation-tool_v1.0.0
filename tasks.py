@@ -109,6 +109,8 @@ def generate_and_process_code(description, rapidapi_key, logo_path, business_nam
         code_gen = CodeGeneration(rapidapi_key)
         raw_code = code_gen.generate_code(description, logo_path, business_name, main_color, secondary_color)
         
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
         # Clean and split code
         html_content, css_content, js_content = clean_gpt_output(raw_code)
         
@@ -120,10 +122,21 @@ def generate_and_process_code(description, rapidapi_key, logo_path, business_nam
         if not js_content.strip():
             logging.warning("JavaScript content is empty")
         
-        logging.info(f"Code generated and processed successfully")
+        # Save files locally
+        save_path = os.path.join(os.getcwd(), "generated_website")
+        os.makedirs(save_path, exist_ok=True)
         
-        return html_content, css_content, js_content
+        with open(os.path.join(save_path, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html_content)
+        with open(os.path.join(save_path, "styles.css"), "w", encoding="utf-8") as f:
+            f.write(css_content)
+        with open(os.path.join(save_path, "script.js"), "w", encoding="utf-8") as f:
+            f.write(js_content)
+        
+        logging.info(f"Code generated and processed successfully at {timestamp}")
+        
+        return html_content, css_content, js_content, save_path
     
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
-        return None, None, None
+        return None, None, None, None
