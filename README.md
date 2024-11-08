@@ -1,6 +1,7 @@
-# 🎨 GPT-4 Powered Website Generator 🚀
+# 🎨 AI-powered Website Generation Tool 🚀
 
-Welcome to the **GPT-4 Website Generator**! This innovative project combines **Streamlit**, **GPT-4**, and **FLUX.1-schnell** to transform your website ideas into reality with just a few clicks. Create custom websites complete with logos, all powered by cutting-edge AI technology! ✨
+##Welcome to the **GPT-4 Website Generator**! This innovative project combines **Streamlit**, **GPT-4**, and **FLUX.1-schnell** to transform your website ideas into reality with just a few clicks. Create custom websites complete with logos, all powered by cutting-edge AI technology! ✨
+
 ![DALL·E 2024-11-08 15 33 23 - A detailed architecture diagram for an AI-powered website generator application  The architecture consists of three main layers_ Frontend, AI Integrat](https://github.com/user-attachments/assets/9905bffc-cc52-4c85-a2fa-4b08ffdc607f)
 
 
@@ -88,7 +89,14 @@ streamlit run app.py
 
 ## ☁️ Deployment
 
+Ah, I understand now! You want to maintain the existing format while updating the deployment section. Here's how I'd write it:
+
 Deploy to Streamlit Cloud:
+1. 🌐 Project deployed at: [Ghata Website Generator](https://ghata-ai-powered-website-generation-tool.streamlit.app/)
+2. 🔑 Enter your RapidAPI key
+3. 🤗 Enter your Hugging Face API key
+
+Want to deploy your own instance? Follow these steps:
 1. 📤 Push to GitHub
 2. 🌐 Visit [Streamlit Community Cloud](https://streamlit.io/cloud)
 3. 🔗 Connect repository
@@ -114,4 +122,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by the GPT-4 Website Generator team
+Made with ❤️ by [Just-a-code-lover](https://github.com/Just-a-code-lover)
