@@ -27,6 +27,91 @@
 
 The **Website Generator** consists of several key components:
 
+> **Note**: This architecture diagram is best viewed on [GitHub.com](https://github.com/Just-a-code-lover/Ghata-AI-Powered-website-generation-tool/blob/main/README.md). If you're viewing this elsewhere, the diagram may appear as code.
+
+```mermaid
+graph TB
+    %% Define subgraphs with improved styling
+    subgraph Frontend["📱 Frontend (Streamlit)"]
+        UI["🖥️ User Interface"]
+        SS["💾 Session State"]
+        Preview["👁️ Website Preview"]
+        Download["⬇️ Download Manager"]
+    end
+
+    subgraph AIServices["🤖 AI Services"]
+        GPT4["🧠 GPT-4 via RapidAPI"]
+        FLUX["🎨 FLUX.1-schnell Model"]
+    end
+
+    subgraph Backend["⚙️ Backend Processing"]
+        CodeGen["📝 Code Generation"]
+        ImgGen["🖼️ Image Generation"]
+        CodeProcess["🔄 Code Processing"]
+        FileSystem["📂 File System"]
+    end
+
+    subgraph DataFlow["📊 Data Flow"]
+        Input["📥 User Input"]
+        Output["📤 Generated Files"]
+    end
+
+    %% Frontend Connections
+    Input --> UI
+    UI --> SS
+    SS --> Preview
+    SS --> Download
+
+    %% AI Service Connections
+    UI -- "Website Description" --> GPT4
+    UI -- "Logo Description" --> FLUX
+
+    %% Backend Processing
+    GPT4 --> CodeGen
+    FLUX --> ImgGen
+    CodeGen --> CodeProcess
+    ImgGen --> FileSystem
+    CodeProcess --> FileSystem
+    FileSystem --> Output
+
+    %% Output Connections
+    Output --> Preview
+    Output --> Download
+
+    %% Enhanced styling
+    classDef frontend fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#0d47a1,font-weight:bold;
+    classDef ai fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#880e4f,font-weight:bold;
+    classDef backend fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#1b5e20,font-weight:bold;
+    classDef data fill:#fff8e1,stroke:#ffa000,stroke-width:2px,color:#ff6f00,font-weight:bold;
+
+    class Frontend,UI,SS,Preview,Download frontend;
+    class AIServices,GPT4,FLUX ai;
+    class Backend,CodeGen,ImgGen,CodeProcess,FileSystem backend;
+    class DataFlow,Input,Output data;
+```
+
+### Diagram Components
+
+The architecture consists of four main sections:
+
+1. **Frontend (Streamlit)**
+   - User Interface for interaction
+   - Session State management
+   - Website Preview functionality
+   - Download Manager for generated files
+
+2. **AI Services**
+   - GPT-4 integration via RapidAPI
+   - FLUX.1-schnell Model for image generation
+
+3. **Backend Processing**
+   - Code Generation and Processing
+   - Image Generation
+   - File System management
+
+4. **Data Flow**
+   - Handles user input and generated output files
+
 1. **🖥️ Frontend (Streamlit):**
    * User-friendly interface
    * Real-time preview
