@@ -90,11 +90,11 @@ def clean_gpt_output(raw_code):
     html_content = html_match.group(1).strip() if html_match else ""
 
     # Extract CSS
-    css_match = re.search(r'/\* CSS START \*/(.*/\* CSS END \*/)', raw_code, re.DOTALL)
+    css_match = re.search(r'/\* CSS START \*/(.*?)/\* CSS END \*/', raw_code, re.DOTALL)
     css_content = css_match.group(1).strip() if css_match else ""
 
     # Extract JavaScript
-    js_match = re.search(r'// JavaScript START(.*)// JavaScript END', raw_code, re.DOTALL)
+    js_match = re.search(r'// JavaScript START(.*?)// JavaScript END', raw_code, re.DOTALL)
     js_content = js_match.group(1).strip() if js_match else ""
 
     # Remove any remaining markdown code blocks
@@ -114,13 +114,33 @@ def generate_and_process_code(description, rapidapi_key, logo_path, business_nam
         # Clean and split code
         html_content, css_content, js_content = clean_gpt_output(raw_code)
         
-        # Validate content
-        if not html_content.strip():
-            raise ValueError("HTML content is empty")
+        # Default CSS and JavaScript
+        default_css = """
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+        }
+        """
+        
+        default_js = """
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Welcome to your AI-generated website!");
+        });
+        """
+        
+        # Use default CSS or JS if empty
         if not css_content.strip():
-            logging.warning("CSS content is empty")
+            logging.warning("CSS content is empty, using default CSS.")
+            css_content = default_css
         if not js_content.strip():
-            logging.warning("JavaScript content is empty")
+            logging.warning("JavaScript content is empty, using default JavaScript.")
+            js_content = default_js
         
         # Save files locally
         save_path = os.path.join(os.getcwd(), "generated_website")
