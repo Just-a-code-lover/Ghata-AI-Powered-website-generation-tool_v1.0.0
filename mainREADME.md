@@ -1,7 +1,3 @@
-Here’s a detailed chunk-by-chunk explanation of the code, covering the main functions and their roles within the **GPT-4 Powered Website Generator** project:
-
----
-
 ### Main Script (Streamlit Setup and UI)
 
 ```python
