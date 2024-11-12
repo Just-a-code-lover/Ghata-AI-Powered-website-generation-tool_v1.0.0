@@ -1,5 +1,3 @@
----
-
 ### Imports and Initial Setup
 
 ```python
@@ -234,5 +232,3 @@ def generate_and_process_code(description, rapidapi_key, logo_path, business_nam
   - **Validation**: Checks each component for content. If empty, a warning or error is logged.
   - **Save Files**: Stores the cleaned code in respective files (`index.html`, `styles.css`, `script.js`) within the `generated_website` folder.
   - **Return**: Outputs the cleaned content and the path to the saved files.
-
----
