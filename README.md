@@ -142,8 +142,9 @@ The architecture consists of four main sections:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/gpt4-website-generator.git
-cd gpt4-website-generator
+git clone https://github.com/Just-a-code-lover/Ghata-AI-Powered-website-generation-tool.git
+
+cd Ghata-AI-Powered-website-generation-tool.
 ```
 
 2. Install dependencies:
@@ -173,8 +174,6 @@ streamlit run app.py
    * 💾 Download your files
 
 ## ☁️ Deployment
-
-Ah, I understand now! You want to maintain the existing format while updating the deployment section. Here's how I'd write it:
 
 Deploy to Streamlit Cloud:
 1. 🌐 Project deployed at: [Ghata Website Generator](https://ghata-ai-powered-website-generation-tool.streamlit.app/)
