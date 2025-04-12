@@ -142,9 +142,10 @@ The architecture consists of four main sections:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Just-a-code-lover/Ghata-AI-Powered-website-generation-tool.git
+git clone https://github.com/Just-a-code-lover/Ghata-AI-Powered-website-generation-tool_v1.0.0.git
 
-cd Ghata-AI-Powered-website-generation-tool.
+cd Ghata-AI-Powered-website-generation-tool_v1.0.0
+
 ```
 
 2. Install dependencies:
