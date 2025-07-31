@@ -2,6 +2,10 @@
 
 Version 2 is now live at https://github.com/Just-a-code-lover/Ghata-AI-Powered-website-generation-tool_v2.0.0
 
+## 🚀 Live Demo
+
+Try the app here: (https://ghata-ai-powered-website-generation-tool.streamlit.app
+
 Welcome to the **GPT-4 Website Generator**! This innovative project combines **Streamlit**, **GPT-4**, and **FLUX.1-schnell** to transform your website ideas into reality with just a few clicks. Create custom websites complete with logos, all powered by cutting-edge AI technology! ✨
 
 ![DALL·E 2024-11-08 15 33 23 - A detailed architecture diagram for an AI-powered website generator application  The architecture consists of three main layers_ Frontend, AI Integrat](https://github.com/user-attachments/assets/9905bffc-cc52-4c85-a2fa-4b08ffdc607f)
